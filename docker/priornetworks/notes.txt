@@ -1,0 +1,2 @@
+mean_std: unterschiedlichen Code gefunden, ausprobiert, ob mit versch. Batch-Sizes das gleiche Ergebnis ==> ja!
+ABER: original andere std-werte! warum?
