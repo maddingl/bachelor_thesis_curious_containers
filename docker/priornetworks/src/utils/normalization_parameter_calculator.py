@@ -78,7 +78,7 @@ if __name__ == '__main__':
     print(calc_mean_std(dataset, 1, 1000))
 
     # TODO:
-    # STD für CIFAR10 hier anders als in main.py -> warum?
+    # STD für CIFAR10 hier anders als in main_train_new_network.py -> warum?
     # überlegen, wie man hier Ergebnisse erzielen und gut zwischenspeichern kann
     # Bewusst SVHN-Daten anders normalisieren und gleicher Normalisierung wie CIFAR10 gegenüberstellen.
     # Überlegung: Real World --> wie werden Daten hier normalisiert? Es kann ja nicht unterschieden werden, ob ID oder OOD --> Mit Voigt drüber sprechen.
