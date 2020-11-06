@@ -20,6 +20,10 @@ parser.add_argument('--name', type=str, required=True, help='Name of the experim
 
 parser.add_argument('--model_name', type=str, required=True, help='Name of the model to test')
 
+parser.add_argument('--id_dataset', type=str, required=True, help='in-domain dataset')
+
+parser.add_argument('--ood_dataset', type=str, required=True, help='out-of-domain dataset')
+
 parser.add_argument('--test_sample_size', type=int, required=False,
                     help='Amount of samples to be used for testing in each in-domain and out-of-domain-dataset. '
                          'If not set, min(len(id_test_dataset), len(ood_test_dataset)) is used')
@@ -35,8 +39,8 @@ if __name__ == '__main__':
     model_handler = ModelHandler()
     model_handler.load(args.model_name)
 
-    data_handler = DataHandler("CIFAR10",
-                               "SVHN",
+    data_handler = DataHandler(args.id_dataset,
+                               args.ood_dataset, ## TODO: Continue here. Test this with CelebA (first with little data here, then with everyting on the server)
                                test_sample_size=args.test_sample_size,
                                individual_normalization=args.individual_normalization)
 
@@ -48,4 +52,5 @@ if __name__ == '__main__':
                       train_dataset=data_handler.id_train_dataset,
                       test_dataset=data_handler.id_test_dataset,
                       hyperparams=hyperparams)
+
     trainer.test()

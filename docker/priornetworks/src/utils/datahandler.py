@@ -29,15 +29,20 @@ class DataHandler:
         # mean_cifar10 = (0.4914, 0.4823, 0.4465)  # this is the CIFAR10-mean.
         # std_cifar10 = (0.247, 0.243, 0.261)  # this is the CIFAR10-std.
         # transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean_cifar10, std_cifar10)])
+        IMAGE_SIZE = 32 # TODO: Maybe differentiate between width and height
 
         id_transform = transforms.Compose([transforms.ToTensor(),
                                            transforms.Normalize(NORMALIZATION_PARAMETERS[id_dataset]['mean'],
-                                                                NORMALIZATION_PARAMETERS[id_dataset]['std'])])
+                                                                NORMALIZATION_PARAMETERS[id_dataset]['std']),
+                                           transforms.Resize(IMAGE_SIZE),
+                                           transforms.CenterCrop((IMAGE_SIZE,IMAGE_SIZE))])
 
         if individual_normalization:
             ood_transform = transforms.Compose([transforms.ToTensor(),
                                                 transforms.Normalize(NORMALIZATION_PARAMETERS[ood_dataset]['mean'],
-                                                                     NORMALIZATION_PARAMETERS[ood_dataset]['std'])])
+                                                                     NORMALIZATION_PARAMETERS[ood_dataset]['std']),
+                                           transforms.Resize(IMAGE_SIZE),
+                                           transforms.CenterCrop((IMAGE_SIZE,IMAGE_SIZE))])
         else:
             ood_transform = id_transform
 
@@ -60,9 +65,14 @@ class DataHandler:
                                               target_transform=None, split='train')
             ood_test_dataset = datasets.SVHN(root=data_dir, download=True, transform=ood_transform,
                                              target_transform=None, split='test')
+        elif ood_dataset == "CelebA":
+            ood_train_dataset = datasets.CelebA(root=data_dir, download=True, transform=ood_transform,
+                                                target_transform=None, split='train')
+            ood_test_dataset = datasets.CelebA(root=data_dir, download=True, transform=ood_transform,
+                                                target_transform=None, split='test')
         # TODO: put in elifs for other datasets
         else:
-            sys.exit(f"{ood_dataset} is not a valid name for an ood_dataset. Options are: 'SVHN'")
+            sys.exit(f"{ood_dataset} is not a valid name for an ood_dataset. Options are: 'SVHN', 'CelebA'")
 
         self.training_sample_size = training_sample_size or min(len(id_train_dataset), len(ood_train_dataset))
         self.test_sample_size = test_sample_size or min(len(id_test_dataset), len(ood_test_dataset))
