@@ -95,8 +95,12 @@ class Trainer:
 
         # Lists for storing training metrics
         self.train_loss, self.train_accuracy, self.train_eval_steps = [], [], []
+
         # Lists for storing test metrics
-        self.test_loss, self.test_accuracy, self.test_eval_steps = [], [], []
+        self.test_loss, self.test_accuracy, \
+        self.test_id_precision, self.test_ood_precision, \
+        self.test_auroc_kl, self.test_auroc_mi, self.test_auroc_de, \
+        self.test_eval_steps = [], [], [], [], [], [], [], []
         self.steps: int = 0
 
     def train(self, n_epochs):
@@ -297,5 +301,16 @@ class Trainer:
         # Log statistics
         self.test_loss.append(test_loss)
         self.test_accuracy.append(accuracy)
-        self.test_eval_steps.append(self.steps)
+        self.test_id_precision.append(id_alpha_0)
+        self.test_ood_precision.append(ood_alpha_0)
+        self.test_auroc_kl.append(auc_KL)
+        self.test_auroc_mi.append(auc_MI)
+        self.test_auroc_de.append(auc_DE)
+        self.test_eval_steps.append(self.steps) # TODO: continue: save these statistics in some form, so you can later make graphs out of them
+
+        self.test_loss, self.test_accuracy, \
+        self.test_id_precision, self.test_ood_precision, \
+        self.test_auroc_kl, self.test_auroc_mi, self.test_auroc_de, \
+        self.test_eval_steps = [], [], [], [], [], [], [], []
         return
+

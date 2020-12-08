@@ -14,15 +14,15 @@ from utils.training import Trainer
 from utils.hyperparams import Hyperparams
 from utils.utils import random_subset
 
-parser = argparse.ArgumentParser(description='Test and existing Dirichlet Prior Network model.')
+parser = argparse.ArgumentParser(description='Test an existing Dirichlet Prior Network model.')
 
 parser.add_argument('--name', type=str, required=True, help='Name of the experiment')
 
 parser.add_argument('--model_name', type=str, required=True, help='Name of the model to test')
 
-parser.add_argument('--id_dataset', type=str, required=True, help='in-domain dataset')
+parser.add_argument('--id_dataset', type=str, default='CIFAR10', help='in-domain dataset')
 
-parser.add_argument('--ood_dataset', type=str, required=True, help='out-of-domain dataset')
+parser.add_argument('--ood_dataset', type=str, default='SVHN', help='out-of-domain dataset')
 
 parser.add_argument('--test_sample_size', type=int, required=False,
                     help='Amount of samples to be used for testing in each in-domain and out-of-domain-dataset. '
@@ -44,7 +44,7 @@ if __name__ == '__main__':
                                test_sample_size=args.test_sample_size,
                                individual_normalization=args.individual_normalization)
 
-    hyperparams = Hyperparams() ### default taken here, since not acutally used for testing, but the trainer-class requires it. # TODO: think about a design where this is better
+    hyperparams = Hyperparams() ## TODO: Think about whether to add these back as arguments
 
     trainer = Trainer(model=model_handler.model,
                       ood_dataset=data_handler.ood_train_dataset,

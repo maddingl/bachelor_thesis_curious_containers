@@ -4,6 +4,7 @@ import torch
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 
+
 # import lmdb
 
 
@@ -64,10 +65,22 @@ if __name__ == '__main__':
     #                         transform=transforms.Compose([transforms.ToTensor()]),
     #                         target_transform=None,
     #                         split='train')
-    dataset = datasets.LSUN(root=DATA_DIR,
-                            transform=transforms.Compose([transforms.ToTensor()]),
-                            target_transform=None,
-                            classes='train')
+    # dataset = datasets.LSUN(root=DATA_DIR,
+    #                         transform=transforms.Compose([transforms.ToTensor()]),
+    #                         target_transform=None,
+    #                         classes='train')
+
+    # dataset = datasets.CelebA(root=DATA_DIR,
+    #                         transform=transforms.Compose([transforms.ToTensor()]),
+    #                         download=True,
+    #                         target_transform=None,
+    #                         split='train')
+
+    dataset = datasets.Places365(root=f"{DATA_DIR}/Places365",
+                                 transform=transforms.Compose([transforms.ToTensor()]),
+                                 download=True,
+                                 target_transform=None,
+                                 split='val')
 
     # dataset = datasets.Omniglot(root=DATA_DIR,
     #                             download=True,

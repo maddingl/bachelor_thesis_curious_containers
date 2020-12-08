@@ -1,0 +1,100 @@
+redVersion: "9"
+cli:
+  cwlVersion: "v1.0"
+  class: "CommandLineTool"
+  baseCommand: "test_old_network"
+  doc: "tbd"
+
+  inputs:
+    name:
+      type: "string"
+      inputBinding:
+        prefix: "--name"
+      doc: "name"
+    model_name:
+      type: "string"
+      inputBinding:
+        prefix: "--model_name"
+      doc: "name of the model to test"
+    id_dataset:
+      type: "string?"
+      inputBinding:
+        prefix: "--id_dataset"
+      doc: "in-domain dataset"
+    ood_dataset:
+      type: "string?"
+      inputBinding:
+        prefix: "--ood_dataset"
+      doc: "out-of-domain dataset"
+    test_sample_size:
+      type: "string?"
+      inputBinding:
+        prefix: "--test_sample_size"
+      doc: "test sample size"
+    individual_normalization:
+      type: "string?"
+      inputBinding:
+        prefix: "--individual_normalization"
+      doc: "individual normalization"
+
+  outputs:
+    out_model:
+      type: "Directory"
+      outputBinding:
+        glob: "resources/model"
+      doc: "output model"
+    std_out:
+      type: 'stdout'
+    std_err:
+      type: 'stderr'
+
+inputs: {}
+
+outputs:
+  out_model:
+    class: "Directory"
+    connector:
+      command: "red-connector-ssh"
+      access:
+        host: "dt1.f4.htw-berlin.de"
+        auth:
+          username: "{{ssh_username}}"
+          password: "{{ssh_password}}"
+        dirPath: "results"
+  std_out:
+    class: 'stdout'
+    connector:
+      command: "red-connector-ssh"
+      access:
+        host: "dt1.f4.htw-berlin.de"
+        auth:
+          username: "{{ssh_username}}"
+          password: "{{ssh_password}}"
+        filePath: "results/stdout.txt"
+  std_err:
+    class: 'stderr'
+    connector:
+      command: "red-connector-ssh"
+      access:
+        host: "dt1.f4.htw-berlin.de"
+        auth:
+          username: "{{ssh_username}}"
+          password: "{{ssh_password}}"
+        filePath: "results/stderr.txt"
+
+container:
+  engine: "docker"
+  settings:
+    ram: 32000
+    image:
+      url: "maddingl/priornetworks"
+
+execution:
+  engine: "ccagency"
+  settings: 
+    access: 
+      url: "https://agency.f4.htw-berlin.de/dt"
+      auth:
+        username: "{{agency_username}}"
+        password: "{{agency_password}}"
+

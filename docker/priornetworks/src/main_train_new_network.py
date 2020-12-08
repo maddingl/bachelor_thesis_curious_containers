@@ -19,6 +19,10 @@ parser = argparse.ArgumentParser(description='Train a Dirichlet Prior Network mo
 
 parser.add_argument('--name', type=str, required=True, help='Name of the experiment')
 
+parser.add_argument('--id_dataset', type=str, default='CIFAR10', help='in-domain dataset')
+
+parser.add_argument('--ood_dataset', type=str, default='SVHN', help='out-of-domain dataset')
+
 parser.add_argument('--training_sample_size', type=int, required=False,
                     help='Amount of samples to be used for training in each in-domain and out-of-domain-dataset. '
                          'If not set, min(len(id_train_dataset), len(ood_train_dataset)) is used')
@@ -60,8 +64,8 @@ if __name__ == '__main__':
     model_handler = ModelHandler()
     model_handler.save(f"{args.name}_inital_model")
 
-    data_handler = DataHandler("CIFAR10",
-                               "SVHN",
+    data_handler = DataHandler(args.id_dataset,
+                               args.ood_dataset,
                                training_sample_size=args.training_sample_size,
                                test_sample_size=args.test_sample_size,
                                individual_normalization=args.individual_normalization)

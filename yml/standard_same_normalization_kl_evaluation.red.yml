@@ -88,7 +88,8 @@ cli:
     std_err:
       type: 'stderr'
 
-inputs: {}
+inputs:
+  name: "standard_same_normalization_kl_evaluation"
 
 outputs:
   out_model:
@@ -110,7 +111,7 @@ outputs:
         auth:
           username: "{{ssh_username}}"
           password: "{{ssh_password}}"
-        filePath: "results/stdout.txt"
+        filePath: "results/standard_same_normalization_kl_evaluation_stdout.txt"
   std_err:
     class: 'stderr'
     connector:
@@ -120,14 +121,14 @@ outputs:
         auth:
           username: "{{ssh_username}}"
           password: "{{ssh_password}}"
-        filePath: "results/stderr.txt"
+        filePath: "results/standard_same_normalization_kl_evaluation_stderr.txt"
 
 container:
   engine: "docker"
   settings:
     ram: 32000
     image:
-      url: "maddingl/priornetworks"
+      url: "maddingl/priornetworks_kl_evaluation"
 
 execution:
   engine: "ccagency"

@@ -1,2 +1,63 @@
 mean_std: unterschiedlichen Code gefunden, ausprobiert, ob mit versch. Batch-Sizes das gleiche Ergebnis ==> ja!
 ABER: original andere std-werte! warum?
+
+gleiche oder unterschiedliche Normalisierung für ID und OOD:
+Wenn man das Ganze in der Real World anwendet, kann ja auch nur gleich normalisiert werden!
+
+###
+
+Trainiert wird mit Loss mit KL-Divergenz, d.h. der Betrag der absoluten Werte spielt eine Rolle und enthält wichtige Information.
+Der AUROC am Ende wird aber aus verschiedenen Uncertainty-Measures berechnet, die auf Softmax-Wahrscheinlichkeiten basieren.
+Warum nicht für den AUROC wieder die KL-Divergenz nutzen?
+
+Aus meinem Text:
+AUROC steht für  \enquote{Area Under Receiver Operator Characteristic}.
+Sie kann als Qualitätsmaß für eine binäre Klassifizierung verwendet werden.
+In diesem Fall ist die positive Klasse \textit{out-of-distribution} (OOD), die negative Klasse \textit{in-distribution} (ID).
+Die Modelloutputs werden hier als Zufallsvariablen aufgefasst.
+Deren Zusammenhang kann über verschiedene Unsicherheitsmaße wie \textit{Mutual Information} oder \textit{Differential Entropy} quantifiziert werden.
+Je geringer dieser Zusammenhang ist, desto eher sollte das Sample als OOD klassifiziert werden.
+
+!!!!!! --> WARUM????? Der geringe Zusammenhang kann auch wegen high data uncertainty, nicht high distributional uncertainy sein!!!! Wir wissen das nicht, weil wir mit Softmax die absolute Info verloren haben!
+
+# Hierfür kann man verschiedene Thresholds ansetzen, die zu unterschiedlichen Konfusionsmatritzen führen.
+# Aus diesen kann man die \textit{True Positive Rate} (TPR, Anteil der als OOD klassifizierten Samples an allen tatsächlichen OOD-Samples) und die \textit{False Positive Rate} (FPR, Anteil der fälschlicherweise als OOD klassifizierten Samples an allen tatsächlichen ID-Samples) ablesen.
+
+###
+Ergebnisse von AUROC 99,9 bei vollen Datensatz auf HTW-Servern!
+
+
+###
+Was soll bei Analyse rein?
+
+
+###
+
+RPL?
+Idee: Entfernung von gelernten Prototypen wird gemessen (statt Softmax), wenn Entfernung überall über Threshold --> OOD
+muss nicht unbedingt theoretisch perfekt verstanden werden, aber einmal hier auf gleiche Datensätze anwenden.
+
+
+###
+
+Vgl mit Baseline: einfaches Softmax - Vergleich Ergebnisse
+
+Simplex ausgeben lassen! Mit drittem Datensatz vergleichen!
+
+###
+
+Plan:
+ImageNet aus RPL nutzen! (Anleitung s. GitHub). SVHN-Trainiertes Netzwerk per scp vom Server holen, hier mit ImageNet testen.
+auch mit random gaussian noise testen!
+Zwischenergebnisse aus Training in JSON auf dem Server abspeichern, per scp hierhier kopieren, Grafiken erstellen.
+
+Noch aufschreiben in der BA:
+Normalisierung - warum immer gleich
+Theorie: Bayesian NN, Ensembles
+
+Fragen:
+RPL: Richtig verstanden, dass ein Prototyp für den Vergleich mit dem gesamten Output gedacht ist?
+     Wo werden Prototypen abgespeichert (im Netz kein Platz)?
+RPL-Paper wie zitieren?
+
+
