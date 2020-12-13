@@ -1,6 +1,3 @@
-#!/usr/bin/python3
-
-
 class Hyperparams:
     def __init__(self,
                  target_concentration=100,

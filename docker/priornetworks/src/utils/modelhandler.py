@@ -4,7 +4,7 @@ import sys
 import time
 
 import torch
-from torchvision import models, datasets, transforms
+from torchvision import models
 
 
 class ModelHandler:
@@ -12,7 +12,6 @@ class ModelHandler:
         self.model_dir = model_dir
         if arch == "vgg16":
             self.model = models.vgg16(num_classes=num_classes)
-        # TODO: add elifs for other architectures
         else:
             sys.exit(f"{arch} is not a valid model architecture! Options: 'vgg16'")
 

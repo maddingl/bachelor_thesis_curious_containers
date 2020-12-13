@@ -2,8 +2,6 @@
 
 import time
 
-import sys
-
 import numpy as np
 import torch
 import torch.nn as nn
@@ -33,7 +31,7 @@ class Trainer:
         # Für In-Domain und für Out-Of-Domain je ein Trainings- und ein Test-Dataset.
         #
         # Außerdem werden die Hyperparameter benötigt.
-        # Das log_interval bestimmt, wie oft Ergebnisse zwischendurch geloggt werden. # TODO: check, ob das aktuell sinnvoll ist mit 100
+        # Das log_interval bestimmt, wie oft Ergebnisse zwischendurch geloggt werden
 
         assert isinstance(model, nn.Module)
         assert isinstance(train_dataset, Dataset)
@@ -99,8 +97,8 @@ class Trainer:
         # Lists for storing test metrics
         self.test_loss, self.test_accuracy, \
         self.test_id_precision, self.test_ood_precision, \
-        self.test_auroc_kl, self.test_auroc_mi, self.test_auroc_de, \
-        self.test_eval_steps = [], [], [], [], [], [], [], []
+        self.test_auroc_mi, self.test_auroc_de, \
+        self.test_eval_steps = [], [], [], [], [], [], []
         self.steps: int = 0
 
     def train(self, n_epochs):
@@ -132,48 +130,6 @@ class Trainer:
 
             # zero the parameter gradients
             self.optimizer.zero_grad()
-
-            ##############
-
-            # print(f'inputs.size(): {inputs.size()}\nood_inputs.size(): {ood_inputs.size()}')
-            #
-            # inputs_dim0 = torch.cat((inputs, ood_inputs), dim=0)  # konkateniere ID-inputs und OOD-inputs
-            # print(f'inputs_dim0.size(): {inputs_dim0.size()}')
-            # #
-            # # inputs_dim1 = torch.cat((inputs, ood_inputs), dim=1)  # konkateniere ID-inputs und OOD-inputs
-            # # print(f'inputs_dim1.size(): {inputs_dim1.size()}')
-            # #
-            # outputs_dim0 = self.model(inputs_dim0)  # forward-pass durch das Modell
-            # print(f'outputs_dim0.size(): {outputs_dim0.size()}')
-            # #
-            # # outputs_dim1 = self.model(inputs_dim1)  # forward-pass durch das Modell
-            # # print(f'outputs_dim1.size(): {outputs_dim1.size()}')
-            # #
-            # id_outputs_dim0, ood_outputs_dim0 = torch.chunk(outputs_dim0, 2, dim=0)  # teile Outputs wieder in ID und OOD
-            # print(f'id_ouputs_dim0.size(): {id_outputs_dim0.size()}\nood_outputs_dim0.size(): {ood_outputs_dim0.size()}')
-            # #
-            # # id_outputs_dim1, ood_outputs_dim1 = torch.chunk(outputs_dim1, 2, dim=1)  # teile Outputs wieder in ID und OOD
-            # # print(f'id_ouputs_dim1.size(): {id_outputs_dim1.size()}\nood_outputs_dim1.size(): {ood_outputs_dim1.size()}')
-
-            # sys.exit(0)
-            # exit(0)
-
-            # cat_inputs = torch.cat([inputs, ood_inputs], dim=1).view(
-            #     torch.Size([2 * inputs.size()[0]]) + inputs.size()[1:])
-            #
-            # print(f'cat_inputs.size(): {cat_inputs.size()}')
-            #
-            # logits = self.model(cat_inputs).view([inputs.size()[0], -1])
-            #
-            # print(f'logits.size(): {logits.size()}')
-            #
-            # id_outputs, ood_outputs = torch.chunk(logits, 2, dim=1)
-            #
-            # print(f'id_outputs.size(): {id_outputs.size()}\nood_outputs.size(): {ood_outputs.size()}')
-            #
-            # exit(0)
-
-            #############
 
             inputs = torch.cat((inputs, ood_inputs), dim=0)  # konkateniere ID-inputs und OOD-inputs
             outputs = self.model(inputs)  # forward-pass durch das Modell
@@ -274,43 +230,35 @@ class Trainer:
         # # domain_labels ist ein Vektor, der für jedes in-domain-sample eine 0
         # # und für jedes out-of-domain-sample ein 1 enthält.
 
-        # Berechnung des Auroc anhand der KL-Divergence (eigene Idee!) # TODO: Abändern! tendiert gerade gegen 0 statt 100!
-        alphas = torch.exp(torch.from_numpy(logits))
-        kl_divergence = dirichlet_kl_divergence(alphas, torch.ones(alphas.shape))
-        auc_KL = roc_auc_score(domain_labels, kl_divergence)
-
         # # Berechnung der Unsicherheit aus den logits. Hier wird 'differential_entropy' als Maß gewählt,
         # # da mit dieser Art der Auswertung im Paper die besten AUROC-Werte erzielt wurden.
         uncertainties = dirichlet_prior_network_uncertainty(logits)
         auc_MI = roc_auc_score(domain_labels, uncertainties['mutual_information'])
         auc_DE = roc_auc_score(domain_labels, uncertainties['differential_entropy'])
 
+
+
         print(f"Test Loss: {np.round(test_loss, 3)}; "
               f"Test Error: {np.round(100.0 * (1.0 - accuracy), 1)}%; "
               f"Test ID precision: {np.round(id_alpha_0, 1)}; "
               f"Test OOD precision: {np.round(ood_alpha_0, 1)}; "
-              f"Test AUROC (KL): {np.round(100.0 * auc_KL, 1)}; "
               f"Test AUROC (MI): {np.round(100.0 * auc_MI, 1)}; "
               f"Test AUROC (DE): {np.round(100.0 * auc_DE, 1)}; ")
 
         if time is not None:
             print(f"Time Per Epoch: {np.round(time / 60.0, 1)} min")
 
-        # TODO: make a graph depicting the above values over time
-
         # Log statistics
         self.test_loss.append(test_loss)
         self.test_accuracy.append(accuracy)
         self.test_id_precision.append(id_alpha_0)
         self.test_ood_precision.append(ood_alpha_0)
-        self.test_auroc_kl.append(auc_KL)
         self.test_auroc_mi.append(auc_MI)
         self.test_auroc_de.append(auc_DE)
-        self.test_eval_steps.append(self.steps) # TODO: continue: save these statistics in some form, so you can later make graphs out of them
+        self.test_eval_steps.append(self.steps)
 
         self.test_loss, self.test_accuracy, \
         self.test_id_precision, self.test_ood_precision, \
-        self.test_auroc_kl, self.test_auroc_mi, self.test_auroc_de, \
-        self.test_eval_steps = [], [], [], [], [], [], [], []
+        self.test_auroc_mi, self.test_auroc_de, \
+        self.test_eval_steps = [], [], [], [], [], [], []
         return
-

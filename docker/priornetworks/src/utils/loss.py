@@ -1,8 +1,7 @@
-#!/usr/bin/python3
-
 from typing import Optional
 
 import torch
+
 
 def dirichlet_kl_divergence(alphas, target_alphas, precision=None, target_precision=None,
                             epsilon=1e-8):  # see supplementary C5

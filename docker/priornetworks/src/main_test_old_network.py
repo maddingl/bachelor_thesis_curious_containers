@@ -1,18 +1,11 @@
 #!/usr/bin/python3
 
 import argparse
-import csv
-import os
-import time
-
-import torch
-from torchvision import models, datasets, transforms
 
 from utils.datahandler import DataHandler
 from utils.modelhandler import ModelHandler
 from utils.training import Trainer
 from utils.hyperparams import Hyperparams
-from utils.utils import random_subset
 
 parser = argparse.ArgumentParser(description='Test an existing Dirichlet Prior Network model.')
 
@@ -40,11 +33,11 @@ if __name__ == '__main__':
     model_handler.load(args.model_name)
 
     data_handler = DataHandler(args.id_dataset,
-                               args.ood_dataset, ## TODO: Continue here. Test this with CelebA (first with little data here, then with everyting on the server)
+                               args.ood_dataset,
                                test_sample_size=args.test_sample_size,
                                individual_normalization=args.individual_normalization)
 
-    hyperparams = Hyperparams() ## TODO: Think about whether to add these back as arguments
+    hyperparams = Hyperparams()
 
     trainer = Trainer(model=model_handler.model,
                       ood_dataset=data_handler.ood_train_dataset,

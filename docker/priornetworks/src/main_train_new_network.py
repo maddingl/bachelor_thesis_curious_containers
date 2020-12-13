@@ -1,17 +1,11 @@
 #!/usr/bin/python3
 
 import argparse
-import os
-import time
-
-import torch
-from torchvision import models, datasets, transforms
 
 from utils.datahandler import DataHandler
 from utils.modelhandler import ModelHandler
 from utils.training import Trainer
 from utils.hyperparams import Hyperparams
-from utils.utils import random_subset
 
 parser = argparse.ArgumentParser(description='Train a Dirichlet Prior Network model using a '
                                              'standard Torchvision architecture on a Torchvision '
