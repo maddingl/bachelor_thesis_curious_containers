@@ -21,18 +21,20 @@ class DataHandler:
 
         IMAGE_SIZE = 32
 
-        id_transform = transforms.Compose([transforms.ToTensor(),
+        id_transform = transforms.Compose([transforms.Resize(IMAGE_SIZE),
+                                           transforms.CenterCrop((IMAGE_SIZE, IMAGE_SIZE)),
+                                           transforms.ToTensor(),
                                            transforms.Normalize(NORMALIZATION_PARAMETERS[id_dataset]['mean'],
-                                                                NORMALIZATION_PARAMETERS[id_dataset]['std']),
-                                           transforms.Resize(IMAGE_SIZE),
-                                           transforms.CenterCrop((IMAGE_SIZE, IMAGE_SIZE))])
+                                                                NORMALIZATION_PARAMETERS[id_dataset]['std'])
+                                           ])
 
         if individual_normalization:
-            ood_transform = transforms.Compose([transforms.ToTensor(),
+            ood_transform = transforms.Compose([transforms.Resize(IMAGE_SIZE),
+                                                transforms.CenterCrop((IMAGE_SIZE, IMAGE_SIZE)),
+                                                transforms.ToTensor(),
                                                 transforms.Normalize(NORMALIZATION_PARAMETERS[ood_dataset]['mean'],
-                                                                     NORMALIZATION_PARAMETERS[ood_dataset]['std']),
-                                                transforms.Resize(IMAGE_SIZE),
-                                                transforms.CenterCrop((IMAGE_SIZE, IMAGE_SIZE))])
+                                                                     NORMALIZATION_PARAMETERS[ood_dataset]['std'])
+                                                ])
         else:
             ood_transform = id_transform
 
@@ -64,6 +66,9 @@ class DataHandler:
 
         self.training_sample_size = training_sample_size or min(len(id_train_dataset), len(ood_train_dataset))
         self.test_sample_size = test_sample_size or min(len(id_test_dataset), len(ood_test_dataset))
+
+        print(f'amount of training samples: {self.training_sample_size}')
+        print(f'amount of test samples: {self.test_sample_size}')
 
         self.id_train_dataset = random_subset(id_train_dataset, self.training_sample_size)
         self.ood_train_dataset = random_subset(ood_train_dataset, self.training_sample_size)

@@ -77,4 +77,6 @@ if __name__ == '__main__':
                       hyperparams=hyperparams)
     trainer.train(n_epochs)
 
+    trainer.save_results(args.name)
+
     model_handler.save(f"{args.name}_trained_model")

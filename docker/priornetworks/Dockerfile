@@ -26,7 +26,8 @@ COPY --chown=cc:cc requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 COPY --chown=cc:cc src /home/cc/src
-RUN ln -s /home/cc/src/main_test_old_network.py /home/cc/.local/bin/test_old_network
+RUN mkdir /home/cc/resources
+COPY --chown=cc:cc resources/data /home/cc/resources/data
 RUN ln -s /home/cc/src/main_train_new_network.py /home/cc/.local/bin/train_new_network
 
 # set environment

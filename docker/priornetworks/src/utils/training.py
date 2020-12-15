@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-
+import json
+import os
 import time
 
 import numpy as np
@@ -256,9 +257,20 @@ class Trainer:
         self.test_auroc_mi.append(auc_MI)
         self.test_auroc_de.append(auc_DE)
         self.test_eval_steps.append(self.steps)
-
-        self.test_loss, self.test_accuracy, \
-        self.test_id_precision, self.test_ood_precision, \
-        self.test_auroc_mi, self.test_auroc_de, \
-        self.test_eval_steps = [], [], [], [], [], [], []
         return
+
+    def save_results(self, name):
+        PATH = 'resources/json'
+        os.makedirs(PATH, exist_ok=True)
+        data = {'test_loss': self.test_loss,
+                'test_accuracy': self.test_accuracy,
+                'test_id_precision': self.test_id_precision,
+                'test_ood_precision': self.test_ood_precision,
+                'test_auroc_mi': self.test_auroc_mi,
+                'test_auroc_de': self.test_auroc_de,
+                'test_eval_steps': self.test_eval_steps}
+        with open(f'{PATH}/{name}.json', 'w') as outfile:
+            json.dump(data, outfile)
+
+#
+# class PriorNetworkTrainer(Trainer):

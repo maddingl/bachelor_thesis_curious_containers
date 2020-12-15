@@ -4,8 +4,6 @@
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --name)                     name="$2";                     shift ;;
-        --id_dataset)               id_dataset="$2";               shift ;;
-        --ood_dataset)              ood_dataset="$2";              shift ;;
         --training_sample_size)     training_sample_size="$2";     shift ;;
         --test_sample_size)         test_sample_size="$2";         shift ;;
         --n_epochs)                 n_epochs="$2";                 shift ;;
@@ -55,8 +53,6 @@ for i in individual_normalization \
          n_epochs \
          test_sample_size \
          training_sample_size \
-         ood_dataset \
-         id_dataset \
          name; do
   if [ ${!i} ]; then
     something_set=1
