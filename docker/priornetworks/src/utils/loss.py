@@ -1,8 +1,7 @@
-#!/usr/bin/python3
-
 from typing import Optional
 
 import torch
+
 
 def dirichlet_kl_divergence(alphas, target_alphas, precision=None, target_precision=None,
                             epsilon=1e-8):  # see supplementary C5
@@ -72,6 +71,8 @@ class DirichletKLLoss:
             target_alphas += \
                 torch.zeros_like(alphas) \
                     .scatter_(1, labels[:, None], self.target_concentration.repeat(alphas.shape[0])[:, None])  # !!
+
+        # print(target_alphas)
 
         if self.reverse:
             loss = dirichlet_kl_divergence(alphas=target_alphas, target_alphas=alphas)

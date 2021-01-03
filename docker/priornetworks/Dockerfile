@@ -26,10 +26,13 @@ COPY --chown=cc:cc requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 COPY --chown=cc:cc src /home/cc/src
-RUN ln -s /home/cc/src/main.py /home/cc/.local/bin/run_project
+RUN mkdir /home/cc/resources
+COPY --chown=cc:cc resources/data /home/cc/resources/data
+RUN ln -s /home/cc/src/main_train_new_network.py /home/cc/.local/bin/train_new_network
 
 # set environment
 ENV PATH="/home/cc/.local/bin:${PATH}"
 ENV LC_ALL="C.UTF-8"
 ENV LANG="C.UTF-8"
+ENV CC_HOME="/home/cc"
 WORKDIR /home/cc

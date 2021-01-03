@@ -1,0 +1,166 @@
+redVersion: "9"
+cli:
+  cwlVersion: "v1.0"
+  class: "CommandLineTool"
+  baseCommand: "train_new_network"
+
+  inputs:
+    name:
+      type: "string"
+      inputBinding:
+        prefix: "--name"
+      doc: "name"
+    id_dataset:
+      type: "string?"
+      inputBinding:
+        prefix: "--id_dataset"
+      doc: "in-domain dataset"
+    ood_dataset:
+      type: "string?"
+      inputBinding:
+        prefix: "--ood_dataset"
+      doc: "out-of-domain dataset"
+    training_sample_size:
+      type: "string?"
+      inputBinding:
+        prefix: "--training_sample_size"
+      doc: "training sample size"
+    test_sample_size:
+      type: "string?"
+      inputBinding:
+        prefix: "--test_sample_size"
+      doc: "test sample size"
+    n_epochs:
+      type: "string?"
+      inputBinding:
+        prefix: "--n_epochs"
+      doc: "n epochs"
+    target_concentration:
+      type: "string?"
+      inputBinding:
+        prefix: "--target_concentration"
+      doc: "target concentration"
+    concentration:
+      type: "string?"
+      inputBinding:
+        prefix: "--concentration"
+      doc: "concentration"
+    reverse_kld:
+      type: "string?"
+      inputBinding:
+        prefix: "--reverse_kld"
+      doc: "reverse kullback leibler divergence"
+    lr:
+      type: "string?"
+      inputBinding:
+        prefix: "--lr"
+      doc: "learning rate"
+    optimizer:
+      type: "string?"
+      inputBinding:
+        prefix: "--optimizer"
+      doc: "optimizer"
+    momentum:
+      type: "string?"
+      inputBinding:
+        prefix: "--momentum"
+      doc: "momentum"
+    weight_decay:
+      type: "string?"
+      inputBinding:
+        prefix: "--weight_decay"
+      doc: "weight decay"
+    batch_size:
+      type: "string?"
+      inputBinding:
+        prefix: "--batch_size"
+      doc: "batch size"
+    clip_norm:
+      type: "string?"
+      inputBinding:
+        prefix: "--clip_norm"
+      doc: "clip norm"
+    individual_normalization:
+      type: "string?"
+      inputBinding:
+        prefix: "--individual_normalization"
+      doc: "individual normalization"
+
+  outputs:
+    out_model:
+      type: "Directory"
+      outputBinding:
+        glob: "resources/model"
+      doc: "output model"
+    out_json:
+      type: "Directory"
+      outputBinding:
+        glob: "resources/json"
+      doc: "results in json format"
+    std_out:
+      type: 'stdout'
+    std_err:
+      type: 'stderr'
+
+inputs:
+  name: "CIFAR10-TIM-9"
+  ood_dataset: "TIM"
+
+outputs:
+  out_model:
+    class: "Directory"
+    connector:
+      command: "red-connector-ssh"
+      access:
+        host: "dt1.f4.htw-berlin.de"
+        auth:
+          username: "{{ssh_username}}"
+          password: "{{ssh_password}}"
+        dirPath: "results"
+  out_json:
+    class: "Directory"
+    connector:
+      command: "red-connector-ssh"
+      access:
+        host: "dt1.f4.htw-berlin.de"
+        auth:
+          username: "{{ssh_username}}"
+          password: "{{ssh_password}}"
+        dirPath: "results"
+  std_out:
+    class: 'stdout'
+    connector:
+      command: "red-connector-ssh"
+      access:
+        host: "dt1.f4.htw-berlin.de"
+        auth:
+          username: "{{ssh_username}}"
+          password: "{{ssh_password}}"
+        filePath: "results/CIFAR10-TIM-9_stdout.txt"
+  std_err:
+    class: 'stderr'
+    connector:
+      command: "red-connector-ssh"
+      access:
+        host: "dt1.f4.htw-berlin.de"
+        auth:
+          username: "{{ssh_username}}"
+          password: "{{ssh_password}}"
+        filePath: "results/CIFAR10-TIM-9_stderr.txt"
+
+container:
+  engine: "docker"
+  settings:
+    ram: 32000
+    image:
+      url: "maddingl/priornetworks_test"
+
+execution:
+  engine: "ccagency"
+  settings: 
+    access: 
+      url: "https://agency.f4.htw-berlin.de/dt"
+      auth:
+        username: "{{agency_username}}"
+        password: "{{agency_password}}"
+

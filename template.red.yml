@@ -2,8 +2,7 @@ redVersion: "9"
 cli:
   cwlVersion: "v1.0"
   class: "CommandLineTool"
-  baseCommand: "run_project"
-  doc: "tbd"
+  baseCommand: "train_new_network"
 
   inputs:
     name:
@@ -11,6 +10,16 @@ cli:
       inputBinding:
         prefix: "--name"
       doc: "name"
+    id_dataset:
+      type: "string?"
+      inputBinding:
+        prefix: "--id_dataset"
+      doc: "in-domain dataset"
+    ood_dataset:
+      type: "string?"
+      inputBinding:
+        prefix: "--ood_dataset"
+      doc: "out-of-domain dataset"
     training_sample_size:
       type: "string?"
       inputBinding:
@@ -83,6 +92,11 @@ cli:
       outputBinding:
         glob: "resources/model"
       doc: "output model"
+    out_json:
+      type: "Directory"
+      outputBinding:
+        glob: "resources/json"
+      doc: "results in json format"
     std_out:
       type: 'stdout'
     std_err:
@@ -92,6 +106,16 @@ inputs: {}
 
 outputs:
   out_model:
+    class: "Directory"
+    connector:
+      command: "red-connector-ssh"
+      access:
+        host: "dt1.f4.htw-berlin.de"
+        auth:
+          username: "{{ssh_username}}"
+          password: "{{ssh_password}}"
+        dirPath: "results"
+  out_json:
     class: "Directory"
     connector:
       command: "red-connector-ssh"
@@ -127,7 +151,7 @@ container:
   settings:
     ram: 32000
     image:
-      url: "maddingl/priornetworks"
+      url: "maddingl/priornetworks_test"
 
 execution:
   engine: "ccagency"

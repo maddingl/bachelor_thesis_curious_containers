@@ -1,0 +1,81 @@
+redVersion: '8'
+cli:
+  cwlVersion: 'v1.0'
+  class: 'CommandLineTool'
+  baseCommand: 'arg_printer.py'
+  doc: 'Simple Test Script'
+
+  inputs:
+    mydir:
+      type: 'Directory'
+      inputBinding:
+        position: 1
+    myfile:
+      type: 'File'
+      inputBinding:
+        position: 2
+  outputs:
+    out_file:
+      type: 'File'
+      outputBinding:
+        glob: 'output.txt'
+    std_out:
+      type: 'stdout'
+    std_err:
+      type: 'stderr'
+  stdout: 'stdout.txt'
+  stderr: 'stderr.txt'
+
+inputs:
+  mydir:
+    class: 'Directory'
+    connector:
+      command: 'red-connector-http'
+      access:
+        url: 'https://raw.githubusercontent.com/curious-containers/cc-core/master/cc_core/'
+        method: 'GET'
+    listing:
+      - class: 'File'
+        basename: 'version.py'
+      - class: 'Directory'
+        basename: 'agent'
+        listing:
+          - class: 'File'
+            basename: '__main__.py'
+  myfile:
+    class: 'File'
+    connector:
+      command: 'red-connector-http'
+      access:
+        url: 'https://raw.githubusercontent.com/curious-containers/cc-core/master/README.md'
+        method: 'GET'
+
+outputs:
+  out_file:
+    class: 'File'
+    connector:
+      command: 'red-connector-http'
+      access:
+        url: 'http://141.45.81.220:5000/local_out.txt'
+        method: 'POST'
+  std_out:
+    class: 'stdout'
+    connector:
+      command: 'red-connector-http'
+      access:
+        url: 'http://141.45.81.220:5000/std_out.txt'
+        method: 'POST'
+  std_err:
+    class: 'stderr'
+    connector:
+      command: 'red-connector-http'
+      access:
+        url: 'http://141.45.81.220:5000/std_err.txt'
+        method: 'POST'
+
+container:
+  engine: 'docker'
+  settings:
+    image:
+      url: 'bruno1996/argprinter_image'
+    ram: 256
