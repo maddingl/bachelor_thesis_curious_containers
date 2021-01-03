@@ -4,7 +4,7 @@ import torch
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 
-from utils.standardised_datasets import TinyImageNet
+from utils.tim_preparation import TinyImageNet
 
 
 def calc_mean_std(dataset, n_channels, batch_size):
@@ -36,11 +36,11 @@ def calc_mean_std(dataset, n_channels, batch_size):
 if __name__ == '__main__':
     data_dir = "resources/data"
 
-    dataset = datasets.CIFAR10(root=f"{data_dir}/CIFAR10",
-                               download=True,
-                               transform=transforms.Compose([transforms.ToTensor()]),
-                               target_transform=None,
-                               train=True)
+    # dataset = datasets.CIFAR10(root=f"{data_dir}/CIFAR10",
+    #                            download=True,
+    #                            transform=transforms.Compose([transforms.ToTensor()]),
+    #                            target_transform=None,
+    #                            train=True)
 
     # dataset = datasets.SVHN(root=f"{data_dir}/SVHN",
     #                         download=True,
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     #                         target_transform=None,
     #                         split='train')
 
-    ood_train_dataset = TinyImageNet(root=f"{data_dir}/TIM",
+    dataset = TinyImageNet(root=f"{data_dir}/TIM",
                                      transform=transforms.Compose([transforms.ToTensor()]),
                                      target_transform=None,
                                      split="train")

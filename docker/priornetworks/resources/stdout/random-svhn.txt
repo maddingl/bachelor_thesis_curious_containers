@@ -1,0 +1,20 @@
+CIFAR10-Random-1_trained_model_15-12-2020_22-47-12.tar
+Test Loss: 100.426; Test Error: 28.7%; Test ID precision: 281.4; Test OOD precision: 85.4; Test AUROC (MI): 74.7; Test AUROC (DE): 77.2; Test AUROC (KL): 75.0; 
+CIFAR10-Random-2_trained_model_16-12-2020_13-30-04.tar
+Test Loss: 103.326; Test Error: 29.1%; Test ID precision: 363.6; Test OOD precision: 89.9; Test AUROC (MI): 75.8; Test AUROC (DE): 77.6; Test AUROC (KL): 75.5; 
+CIFAR10-Random-3_trained_model_16-12-2020_13-30-21.tar
+Test Loss: 99.306; Test Error: 28.9%; Test ID precision: 319.7; Test OOD precision: 82.2; Test AUROC (MI): 77.0; Test AUROC (DE): 79.1; Test AUROC (KL): 77.2; 
+CIFAR10-Random-4_trained_model_17-12-2020_04-01-36.tar
+Test Loss: 100.091; Test Error: 27.8%; Test ID precision: 343.3; Test OOD precision: 123.0; Test AUROC (MI): 68.9; Test AUROC (DE): 71.7; Test AUROC (KL): 69.4; 
+CIFAR10-Random-5_trained_model_17-12-2020_04-02-15.tar
+Test Loss: 97.179; Test Error: 28.3%; Test ID precision: 242.5; Test OOD precision: 60.6; Test AUROC (MI): 78.9; Test AUROC (DE): 80.3; Test AUROC (KL): 78.8; 
+CIFAR10-Random-6_trained_model_17-12-2020_18-42-43.tar
+Test Loss: 101.57; Test Error: 27.7%; Test ID precision: 421.6; Test OOD precision: 133.8; Test AUROC (MI): 69.0; Test AUROC (DE): 71.5; Test AUROC (KL): 69.4; 
+CIFAR10-Random-7_trained_model_17-12-2020_18-43-23.tar
+Test Loss: 96.568; Test Error: 27.8%; Test ID precision: 311.8; Test OOD precision: 85.6; Test AUROC (MI): 76.6; Test AUROC (DE): 78.4; Test AUROC (KL): 76.7; 
+CIFAR10-Random-8_trained_model_18-12-2020_09-16-36.tar
+Test Loss: 101.711; Test Error: 28.4%; Test ID precision: 365.3; Test OOD precision: 109.8; Test AUROC (MI): 73.6; Test AUROC (DE): 75.5; Test AUROC (KL): 73.9; 
+CIFAR10-Random-9_trained_model_18-12-2020_09-17-04.tar
+Test Loss: 103.223; Test Error: 28.7%; Test ID precision: 399.2; Test OOD precision: 127.9; Test AUROC (MI): 69.1; Test AUROC (DE): 71.1; Test AUROC (KL): 70.1; 
+CIFAR10-Random-10_trained_model_15-12-2020_22-47-30.tar
+Test Loss: 102.614; Test Error: 27.9%; Test ID precision: 337.7; Test OOD precision: 129.6; Test AUROC (MI): 66.1; Test AUROC (DE): 69.1; Test AUROC (KL): 66.8; 

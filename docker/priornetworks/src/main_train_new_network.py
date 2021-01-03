@@ -1,6 +1,5 @@
-#!/usr/bin/python3
-
 import argparse
+import os
 
 from utils.datahandler import DataHandler
 from utils.modelhandler import ModelHandler
@@ -54,6 +53,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     print(args.name)
+    print(os.getcwd())
+    print(os.listdir())
 
     model_handler = ModelHandler()
     model_handler.save(f"{args.name}_inital_model")

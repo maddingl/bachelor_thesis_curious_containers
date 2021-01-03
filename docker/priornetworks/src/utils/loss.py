@@ -72,6 +72,8 @@ class DirichletKLLoss:
                 torch.zeros_like(alphas) \
                     .scatter_(1, labels[:, None], self.target_concentration.repeat(alphas.shape[0])[:, None])  # !!
 
+        # print(target_alphas)
+
         if self.reverse:
             loss = dirichlet_kl_divergence(alphas=target_alphas, target_alphas=alphas)
         else:

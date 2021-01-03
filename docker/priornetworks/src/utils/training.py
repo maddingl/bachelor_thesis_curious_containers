@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 import json
 import os
 import time
@@ -98,8 +97,8 @@ class Trainer:
         # Lists for storing test metrics
         self.test_loss, self.test_accuracy, \
         self.test_id_precision, self.test_ood_precision, \
-        self.test_auroc_mi, self.test_auroc_de, \
-        self.test_eval_steps = [], [], [], [], [], [], []
+        self.test_auroc_mi, self.test_auroc_de, self.test_auroc_kl, \
+        self.test_eval_steps = [], [], [], [], [], [], [], []
         self.steps: int = 0
 
     def train(self, n_epochs):
@@ -181,7 +180,7 @@ class Trainer:
                     f"Train OOD precision: {np.round(ood_alpha_0, 1)}; ")
         return
 
-    def test(self, time=None):
+    def test(self, time=None, print_simplex=False):
         """
         Single evaluation on the entire provided test dataset.
         Return accuracy, mean test loss, and an array of predicted probabilities
@@ -206,6 +205,17 @@ class Trainer:
 
                 accuracy += calc_accuracy_torch(probs, labels).item()
                 test_loss += self.test_criterion(id_outputs, ood_outputs, labels).item()
+
+                if print_simplex:
+                    print("id_sample: ")
+                    id_simplex = torch.exp(id_outputs)[0]
+                    label = labels[0]
+                    print(f"\tlabel: {label}")
+                    print(f"\tsimplex: {id_simplex}")
+
+                    print("ood_sample: ")
+                    ood_simplex = torch.exp(ood_outputs[0])
+                    print(f"\tsimplex: {ood_simplex}")
 
                 # Get in-domain and OOD Precision
                 id_alpha_0 += torch.mean(torch.sum(torch.exp(id_outputs), dim=1)).item()
@@ -237,14 +247,18 @@ class Trainer:
         auc_MI = roc_auc_score(domain_labels, uncertainties['mutual_information'])
         auc_DE = roc_auc_score(domain_labels, uncertainties['differential_entropy'])
 
-
+        # Berechnung des Auroc anhand der KL-Divergence (eigene Idee!)
+        alphas = torch.exp(torch.from_numpy(logits))
+        kl_divergence = dirichlet_kl_divergence(alphas, torch.ones(alphas.shape))
+        auc_KL = 1 - roc_auc_score(domain_labels, kl_divergence)
 
         print(f"Test Loss: {np.round(test_loss, 3)}; "
               f"Test Error: {np.round(100.0 * (1.0 - accuracy), 1)}%; "
               f"Test ID precision: {np.round(id_alpha_0, 1)}; "
               f"Test OOD precision: {np.round(ood_alpha_0, 1)}; "
               f"Test AUROC (MI): {np.round(100.0 * auc_MI, 1)}; "
-              f"Test AUROC (DE): {np.round(100.0 * auc_DE, 1)}; ")
+              f"Test AUROC (DE): {np.round(100.0 * auc_DE, 1)}; "
+              f"Test AUROC (KL): {np.round(100.0 * auc_KL, 1)}; ")
 
         if time is not None:
             print(f"Time Per Epoch: {np.round(time / 60.0, 1)} min")
@@ -256,6 +270,7 @@ class Trainer:
         self.test_ood_precision.append(ood_alpha_0)
         self.test_auroc_mi.append(auc_MI)
         self.test_auroc_de.append(auc_DE)
+        self.test_auroc_kl.append(auc_KL)
         self.test_eval_steps.append(self.steps)
         return
 
@@ -271,6 +286,3 @@ class Trainer:
                 'test_eval_steps': self.test_eval_steps}
         with open(f'{PATH}/{name}.json', 'w') as outfile:
             json.dump(data, outfile)
-
-#
-# class PriorNetworkTrainer(Trainer):

@@ -34,4 +34,5 @@ RUN ln -s /home/cc/src/main_train_new_network.py /home/cc/.local/bin/train_new_n
 ENV PATH="/home/cc/.local/bin:${PATH}"
 ENV LC_ALL="C.UTF-8"
 ENV LANG="C.UTF-8"
+ENV CC_HOME="/home/cc"
 WORKDIR /home/cc

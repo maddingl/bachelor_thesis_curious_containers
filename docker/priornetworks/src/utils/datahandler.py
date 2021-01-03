@@ -3,18 +3,17 @@ import sys
 
 from torchvision import datasets, transforms
 
-from utils.standardised_datasets import TinyImageNet
+from utils.tim_preparation import TinyImageNet
 from utils.utils import random_subset
 
 NORMALIZATION_PARAMETERS = {'CIFAR10': {'mean': [0.4914, 0.4822, 0.4465], 'std': [0.2112, 0.2086, 0.2121]},
                             'SVHN': {'mean': [0.4377, 0.4438, 0.4728], 'std': [0.1287, 0.1320, 0.1128]},
-                            'TIM': {'mean': [0.4802, 0.4481, 0.3975], 'std': [0.2382, 0.2342, 0.2356]}
-                            # from train only
+                            'TIM': {'mean': [0.4802, 0.4481, 0.3975], 'std': [0.2382, 0.2342, 0.2356]} # from train only
                             }
 
 
 class DataHandler:
-    def __init__(self, id_dataset, ood_dataset, data_dir="resources/data", individual_normalization=False,
+    def __init__(self, id_dataset, ood_dataset, data_dir=f"{os.getenv('CC_HOME')}/resources/data", individual_normalization=False,
                  training_sample_size=None, test_sample_size=None):
 
         os.makedirs(data_dir, exist_ok=True)
@@ -62,13 +61,13 @@ class DataHandler:
             ood_test_dataset = datasets.FakeData(size=len(id_test_dataset), image_size=(3, IMAGE_SIZE, IMAGE_SIZE),
                                                  num_classes=10, transform=ood_transform, target_transform=None)
         else:
-            sys.exit(f"{ood_dataset} is not a valid name for an ood_dataset. Options are: 'SVHN', 'TIM'")
+            sys.exit(f"{ood_dataset} is not a valid name for an ood_dataset. Options are: 'SVHN', 'TIM', 'Random'")
 
         self.training_sample_size = training_sample_size or min(len(id_train_dataset), len(ood_train_dataset))
         self.test_sample_size = test_sample_size or min(len(id_test_dataset), len(ood_test_dataset))
 
-        print(f'amount of training samples: {self.training_sample_size}')
-        print(f'amount of test samples: {self.test_sample_size}')
+        # print(f'amount of training samples: {self.training_sample_size}')
+        # print(f'amount of test samples: {self.test_sample_size}')
 
         self.id_train_dataset = random_subset(id_train_dataset, self.training_sample_size)
         self.ood_train_dataset = random_subset(ood_train_dataset, self.training_sample_size)
