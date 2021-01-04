@@ -27,7 +27,7 @@ Damit die folgenden Befehle funktionieren, muss der Nutzer im [HTW-VPN](https://
 
 ### Ausführung eines Experiments auf einem CC-Agency-Server
 
-`faice exec yml/{name}.red.yml`
+`$ faice exec yml/{name}.red.yml`
 
 CC-Agency bietet eine REST-Schnittstelle zur Überprüfung des Status der Experimente. Mittels z.B. Postman liefert `GET https://agency.f4.htw-berlin.de/dt/batches` unter Nutzung von Basic Auth einen Überblick im JSON-Format.
 
@@ -41,6 +41,6 @@ Nach der vollständigen Ausführung finden sich auf dt1.f4.htw-berlin.de (über 
 
 ### Erstellung eines neues Experiments
 
-`./create-yml.sh --name {name} [weitere Commandline-Argumente von main_train_new_network.py]`
+`$ ./create-yml.sh --name {name} [weitere Commandline-Argumente von main_train_new_network.py]`
 
 Der Name wird dabei sowohl für die `.red.yml` - Datei als auch für die Outputs auf dt1.f4.htw-berlin.de verwendet. Alle Commandline-Argumente werden an main_train_new_network.py weitergeleitet.
