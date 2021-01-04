@@ -1,6 +1,6 @@
 ## Installation
 
-`python3` und `pip` wird benötigt.
+`python3` und `pip` werden benötigt.
 
 Installation der Dependencies (am besten in einem Virtual Environment):
 
