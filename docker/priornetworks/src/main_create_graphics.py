@@ -58,3 +58,16 @@ if __name__ == '__main__':
                                 alpha=.1)
             plt.savefig(f"{SAVE_DIR}/{var}-all")
             print(f"saved to {SAVE_DIR}/{var}-all.png")
+
+    plt.clf()
+    with open(f"{JSON_DIR}/CIFAR10-SVHN-forward-kld.json") as f:
+        data = json.load(f)
+        fig, ax = plt.subplots()
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.grid(color='#dddddd')
+        ax.set_xlabel('epoch')
+
+        ax.plot(epoch_list, data["test_id_precision"], linewidth=2)
+    plt.savefig(f"{SAVE_DIR}/CIFAR10-SVHN-FKLD-ID-Precision")
+    print(f"saved to {SAVE_DIR}/CIFAR10-SVHN-FKLD-ID-Precision.png")

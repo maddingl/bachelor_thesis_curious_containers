@@ -1,6 +1,6 @@
 """
-A number of classes that transform the torch vision datasets into a standard format
-usable for uncertainty (e.g. out-of-domain vs. in-domain) experimentation.
+All contents of this file are taken from
+https://github.com/KaosEngineer/PriorNetworks/blob/master/prior_networks/datasets/image/standardised_datasets.py
 """
 from torchvision.datasets.folder import *
 import torchvision.datasets as datasets
@@ -18,7 +18,6 @@ class TinyImageNet(datasets.VisionDataset):
                  extensions=IMG_EXTENSIONS,
                  loader=default_loader,
                  download=None):
-
         if download is not None:
             print('TinyImageNet must be downloaded manually')
 

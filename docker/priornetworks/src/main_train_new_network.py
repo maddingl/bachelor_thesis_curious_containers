@@ -1,5 +1,6 @@
+#!/usr/bin/python3
+
 import argparse
-import os
 
 from utils.datahandler import DataHandler
 from utils.modelhandler import ModelHandler

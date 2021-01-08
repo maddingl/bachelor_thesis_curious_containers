@@ -2,7 +2,6 @@ from typing import Optional
 
 import torch
 
-
 def dirichlet_kl_divergence(alphas, target_alphas, precision=None, target_precision=None,
                             epsilon=1e-8):  # see supplementary C5
     """
@@ -82,6 +81,9 @@ class DirichletKLLoss:
 
 
 class PriorNetMixedLoss:
+    """
+    combines id and ood loss
+    """
     def __init__(self, id_loss, ood_loss):
         self.id_loss = id_loss
         self.ood_loss = ood_loss

@@ -17,22 +17,27 @@ from utils.utils import dirichlet_prior_network_uncertainty, calc_accuracy_torch
 
 from utils.loss import dirichlet_kl_divergence
 
+JSON_DIR = "resources/json"
+
 
 class Trainer:
-    def __init__(self, model,
+    def __init__(self,
+                 model,
                  train_dataset,
                  ood_dataset,
                  test_dataset,
                  test_ood_dataset,
                  hyperparams,
                  log_interval=100):
-
-        # Die Klasse benötigt ein Modell und vier Datasets als Input:
-        # Für In-Domain und für Out-Of-Domain je ein Trainings- und ein Test-Dataset.
-        #
-        # Außerdem werden die Hyperparameter benötigt.
-        # Das log_interval bestimmt, wie oft Ergebnisse zwischendurch geloggt werden
-
+        """
+        @param model: model to train or test
+        @param train_dataset: id dataset to be used for training
+        @param ood_dataset: ood dataset to be used for training
+        @param test_dataset: id dataset to be used for testing
+        @param test_ood_dataset: ood dataset to be used for testing
+        @param hyperparams: instance of class Hyperparams
+        @param log_interval: interval to store statistics in LOG.tzt
+        """
         assert isinstance(model, nn.Module)
         assert isinstance(train_dataset, Dataset)
         assert isinstance(ood_dataset, Dataset)
@@ -102,6 +107,10 @@ class Trainer:
         self.steps: int = 0
 
     def train(self, n_epochs):
+        """
+        starts a full training process
+        @param n_epochs: amount of epochs
+        """
         assert isinstance(n_epochs, int)
 
         for epoch in range(n_epochs):
@@ -111,9 +120,11 @@ class Trainer:
             self._train_single_epoch()
             # Test
             self.test(time=time.time() - start)
-        return
 
     def _train_single_epoch(self):
+        """
+        one single training epoch
+        """
         # Set model in train mode
         self.model.train()
 
@@ -178,12 +189,11 @@ class Trainer:
                     f"Train Error: {np.round(100.0 * (1.0 - accuracies), 1)}; "
                     f"Train ID precision: {np.round(id_alpha_0, 1)}; "
                     f"Train OOD precision: {np.round(ood_alpha_0, 1)}; ")
-        return
 
     def test(self, time=None, print_simplex=False):
         """
         Single evaluation on the entire provided test dataset.
-        Return accuracy, mean test loss, and an array of predicted probabilities
+        Statistics are stored in several class fields
         """
         test_loss, accuracy = 0.0, 0.0
 
@@ -275,8 +285,11 @@ class Trainer:
         return
 
     def save_results(self, name):
-        PATH = 'resources/json'
-        os.makedirs(PATH, exist_ok=True)
+        """
+        store statistics in a JSON file
+        @param name: name of file (without '.json')
+        """
+        os.makedirs(JSON_DIR, exist_ok=True)
         data = {'test_loss': self.test_loss,
                 'test_accuracy': self.test_accuracy,
                 'test_id_precision': self.test_id_precision,
@@ -284,5 +297,5 @@ class Trainer:
                 'test_auroc_mi': self.test_auroc_mi,
                 'test_auroc_de': self.test_auroc_de,
                 'test_eval_steps': self.test_eval_steps}
-        with open(f'{PATH}/{name}.json', 'w') as outfile:
+        with open(f'{JSON_DIR}/{name}.json', 'w') as outfile:
             json.dump(data, outfile)

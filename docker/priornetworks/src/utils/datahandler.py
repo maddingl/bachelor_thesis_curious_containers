@@ -13,9 +13,19 @@ NORMALIZATION_PARAMETERS = {'CIFAR10': {'mean': [0.4914, 0.4822, 0.4465], 'std':
 
 
 class DataHandler:
+    """
+    class for initiating and providing datasets
+    """
     def __init__(self, id_dataset, ood_dataset, data_dir=f"{os.getenv('CC_HOME')}/resources/data", individual_normalization=False,
                  training_sample_size=None, test_sample_size=None):
-
+        """
+        @param id_dataset: in-domain-dataset name
+        @param ood_dataset: out-of-domain-dataset name
+        @param data_dir: directory where datasets should be stored
+        @param individual_normalization: whether or not to normalize ood individually
+        @param training_sample_size: maximum amount of training samples to provide in datasets
+        @param test_sample_size: maximum amount of test samples to provide in datasets
+        """
         os.makedirs(data_dir, exist_ok=True)
 
         IMAGE_SIZE = 32
@@ -65,9 +75,6 @@ class DataHandler:
 
         self.training_sample_size = training_sample_size or min(len(id_train_dataset), len(ood_train_dataset))
         self.test_sample_size = test_sample_size or min(len(id_test_dataset), len(ood_test_dataset))
-
-        # print(f'amount of training samples: {self.training_sample_size}')
-        # print(f'amount of test samples: {self.test_sample_size}')
 
         self.id_train_dataset = random_subset(id_train_dataset, self.training_sample_size)
         self.ood_train_dataset = random_subset(ood_train_dataset, self.training_sample_size)

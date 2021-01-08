@@ -8,6 +8,12 @@ from utils.tim_preparation import TinyImageNet
 
 
 def calc_mean_std(dataset, n_channels, batch_size):
+    """
+    @param dataset: dataset to calculate mean and std for
+    @param n_channels: amount of color channels
+    @param batch_size: amount of samples to load each iteration
+    @return: (mean, std): two single value tensors
+    """
     # source: https://stackoverflow.com/questions/60101240/finding-mean-and-standard-deviation-across-image-channels-pytorch/60803379#60803379
     loader = DataLoader(
         dataset,
