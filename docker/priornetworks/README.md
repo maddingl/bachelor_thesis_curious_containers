@@ -53,6 +53,11 @@ Auflistung der optionalen Argumente:
 `$ python3 src/main_create_graphics.py`
 
 `src/main_create_graphics.py` nutzt die Dateien aus `resources/json`. Damit werden die Graphen in `resources/graphics` erstellt.
+
+
+### Erstellen von Graphen der Kullback-Leibler-Divergenz
+
+`$ python3 src/main_create_graphics_kld.py`
  
  ### Auswertung unterschiedlicher OOD-Datensätze beim Trainieren und Testen
   
